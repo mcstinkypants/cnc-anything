@@ -9,6 +9,12 @@ VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)
 ARCH=amd64
 case "$(uname -m)" in x86_64|amd64) ;; *) echo "This script packages x86_64 builds only" >&2; exit 1 ;; esac
 
+. packaging/common.sh
+find_cargo
+need_linker
+need_tool dpkg-deb "to build the .deb package" dpkg
+need_tool objdump "to work out the package's library needs" binutils
+
 cargo build --release
 BIN=target/release/cnc-anything
 

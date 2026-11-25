@@ -8,6 +8,9 @@ A desktop app (Rust) to design jobs and send them to GRBL laser cutters and 2D C
   If AppImageLauncher is installed it first asks whether to integrate the app; either answer works.
 - **Debian/Ubuntu (x86_64):** `dist/cnc-anything_<version>_amd64.deb`, installed with your package manager.
 - **From source:** `cargo run --release`
+- **What building needs:** the Rust toolchain (from https://rustup.rs, or run a packaging script with `INSTALL_RUST=1`),
+  a C linker (`build-essential`), `git`, and for the packages `squashfs-tools`, `curl` (AppImage), `dpkg` and `binutils` (.deb).
+  The scripts find Rust in `~/.cargo/bin` even from a plain shell, and say what's missing if something is.
 - **Build the packages:** `sh packaging/release.sh` (AppImage and .deb), or `build-appimage.sh` / `build-deb.sh` on their own.
 
 ## Versions
