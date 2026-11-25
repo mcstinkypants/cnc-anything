@@ -319,7 +319,7 @@ dependencies = [
 
 [[package]]
 name = "cnc-anything"
-version = "3.0.0"
+version = "0.1.0"
 dependencies = [
  "base64",
  "cavalier_contours",

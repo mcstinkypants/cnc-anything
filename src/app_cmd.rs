@@ -184,6 +184,12 @@ impl App {
                         .into(),
                 ))
             }
+            "about" => {
+                self.info = Some((
+                    "About CNC Anything".into(),
+                    format!("CNC Anything {}\nGit commit {}\n\nDesign jobs and send them to GRBL laser cutters and CNC routers.\nFonts: Noto (SIL Open Font License).", crate::gcode::APP_VERSION, crate::gcode::GIT_COMMIT),
+                ))
+            }
             "keys" => {
                 self.info = Some((
                     "Keyboard shortcuts".into(),

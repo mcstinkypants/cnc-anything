@@ -6,8 +6,15 @@ A desktop app (Rust) to design jobs and send them to GRBL laser cutters and 2D C
 
 - **AppImage:** `dist/CNC_Anything-x86_64.AppImage`. Make it executable and double-click it, or run it from a terminal.
   If AppImageLauncher is installed it first asks whether to integrate the app; either answer works.
+- **Debian/Ubuntu (x86_64):** `dist/cnc-anything_<version>_amd64.deb`, installed with your package manager.
 - **From source:** `cargo run --release`
-- **Build the AppImage again:** `sh packaging/build-appimage.sh`
+- **Build the packages:** `sh packaging/release.sh` (AppImage and .deb), or `build-appimage.sh` / `build-deb.sh` on their own.
+
+## Versions
+
+Every change is committed as `x.y.z - {feature|bugfix|chore|docs} - Description`, with the version in `Cargo.toml`
+bumped to match. The title bar (and Help → About) shows the version and the git commit the program was built from;
+a build made from uncommitted changes shows `-modified` after the commit id. Commit first, then build the packages.
 
 On Linux, using a machine over USB needs permission for serial ports: your user must be in the
 `dialout` group (ask your system's administrator, or see your distribution's help), then log out and back in.

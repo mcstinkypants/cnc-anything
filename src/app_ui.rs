@@ -87,7 +87,8 @@ impl App {
 
     pub fn menu_bar(&mut self, ui: &mut egui::Ui) {
         egui::menu::bar(ui, |ui| {
-            ui.label(RichText::new("⚙ CNC Anything").strong().color(Color32::from_rgb(0xff, 0x8a, 0x3a)));
+            ui.label(RichText::new("⚙ CNC Anything").strong().color(Color32::from_rgb(0xff, 0x8a, 0x3a))).on_hover_text(format!("Version {}, built from commit {}", crate::gcode::APP_VERSION, crate::gcode::GIT_COMMIT));
+            ui.label(RichText::new(crate::gcode::version_label()).small().weak());
             ui.add_space(8.0);
             let item = |ui: &mut egui::Ui, label: &str, short: &str, c: &str, me: &mut App| {
                 let text = if short.is_empty() { label.to_string() } else { format!("{label}    ({short})") };
@@ -177,6 +178,7 @@ impl App {
             ui.menu_button("Help", |ui| {
                 item(ui, "Getting started", "", "help", self);
                 item(ui, "Keyboard shortcuts", "", "keys", self);
+                item(ui, "About CNC Anything", "", "about", self);
             });
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 ui.label(RichText::new(format!("{}{}", self.doc_name, if self.doc.dirty { " •" } else { "" })).weak());

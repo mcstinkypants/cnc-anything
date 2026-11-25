@@ -24,7 +24,7 @@ mod tools;
 use std::path::PathBuf;
 
 fn usage() -> ! {
-    println!("CNC Anything {}\n\nUsage: cnc-anything [--screenshot FILE.png] [--write-icon FILE.png] [PROJECT.cnca]", env!("CARGO_PKG_VERSION"));
+    println!("CNC Anything {}\n\nUsage: cnc-anything [--screenshot FILE.png] [--write-icon FILE.png] [PROJECT.cnca]", gcode::version_label());
     std::process::exit(0);
 }
 
@@ -82,14 +82,14 @@ fn main() {
             }
             "-h" | "--help" => usage(),
             "--version" | "-V" => {
-                println!("CNC Anything {}", env!("CARGO_PKG_VERSION"));
+                println!("CNC Anything {}", gcode::version_label());
                 return;
             }
             s if s.starts_with("--") => {} // ignore options added by launchers
             s => open = Some(PathBuf::from(s)),
         }
     }
-    let mut viewport = egui::ViewportBuilder::default().with_title("CNC Anything").with_inner_size([1440.0, 900.0]).with_min_inner_size([960.0, 600.0]).with_app_id("cnc-anything");
+    let mut viewport = egui::ViewportBuilder::default().with_title(format!("CNC Anything {}", gcode::version_label())).with_inner_size([1440.0, 900.0]).with_min_inner_size([960.0, 600.0]).with_app_id("cnc-anything");
     if let Some(icon) = icon_data() {
         viewport = viewport.with_icon(icon);
     }

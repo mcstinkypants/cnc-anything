@@ -10,6 +10,12 @@ use std::sync::Arc;
 
 pub const APP_NAME: &str = "CNC Anything";
 pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
+/// short git commit id the program was built from ("-modified" when built from uncommitted changes)
+pub const GIT_COMMIT: &str = env!("GIT_COMMIT");
+/// "0.1.0 (abc1234)"
+pub fn version_label() -> String {
+    format!("{APP_VERSION} ({GIT_COMMIT})")
+}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", default)]
