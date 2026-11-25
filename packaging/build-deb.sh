@@ -69,6 +69,10 @@ Description: Design jobs and send them to GRBL laser cutters and CNC routers
  preview the job and stream it over USB to a GRBL controller.
 CTRL
 
+# standard permissions: folders 755, files 644 (the program 755)
+find "$PKG" -type d -exec chmod 0755 {} +
+chmod 0644 "$PKG/DEBIAN/control"
+
 mkdir -p dist
 OUT="dist/cnc-anything_${VERSION}_${ARCH}.deb"
 dpkg-deb --root-owner-group --build "$PKG" "$OUT" >/dev/null

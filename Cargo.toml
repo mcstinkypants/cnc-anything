@@ -1,6 +1,6 @@
 [package]
 name = "cnc-anything"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "CNC Anything: design jobs and send them to GRBL laser cutters and CNC routers"
 
