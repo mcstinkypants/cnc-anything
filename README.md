@@ -8,9 +8,6 @@ A desktop app (Rust) to design jobs and send them to GRBL laser cutters and 2D C
   If AppImageLauncher is installed it first asks whether to integrate the app; either answer works.
 - **Debian/Ubuntu (x86_64):** `dist/cnc-anything_<version>_amd64.deb`, installed with your package manager.
 - **From source:** `cargo run --release`
-- **What building needs:** the Rust toolchain (from https://rustup.rs, or run a packaging script with `INSTALL_RUST=1`),
-  a C linker (`build-essential`), `git`, and for the packages `squashfs-tools`, `curl` (AppImage), `dpkg` and `binutils` (.deb).
-  The scripts find Rust in `~/.cargo/bin` even from a plain shell, and say what's missing if something is.
 - **Build the packages:** `sh packaging/release.sh` (AppImage and .deb), or `build-appimage.sh` / `build-deb.sh` on their own.
 
 ## Versions
@@ -21,6 +18,23 @@ a build made from uncommitted changes shows `-modified` after the commit id. Com
 
 On Linux, using a machine over USB needs permission for serial ports: your user must be in the
 `dialout` group (ask your system's administrator, or see your distribution's help), then log out and back in.
+
+## Before you build (prerequisites)
+
+CNC Anything is written in **Rust**, so building it from source needs the Rust toolchain, which isn't
+usually installed on a computer by default. You don't need any of this just to *run* the AppImage or .deb.
+
+| Needed for | Tool | How to get it |
+|---|---|---|
+| everything | Rust toolchain (`cargo`, `rustc`) | https://rustup.rs (installs for your user, no admin rights), or run a build script with `INSTALL_RUST=1` in front |
+| everything | C compiler / linker (`cc`) | `build-essential` (Debian/Ubuntu), `gcc` (Fedora), `base-devel` (Arch) |
+| title bar commit id (optional) | `git` | `git` |
+| AppImage | `mksquashfs`, `curl` | `squashfs-tools`, `curl` |
+| .deb | `dpkg-deb`, `objdump` | `dpkg`, `binutils` |
+
+Check what's installed with `sh packaging/check-prereqs.sh`. The build scripts run the same check first and,
+if something is missing, list what was found and what wasn't, with install commands. They also find Rust in
+`~/.cargo/bin` when a plain shell doesn't have it on its PATH.
 
 ## What it does
 

@@ -2,6 +2,10 @@
 # Builds every package from the current commit: the AppImage and the x86_64 .deb.
 # Commit first: the program shows the commit id it was built from in its title bar.
 set -eu
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
+# check everything once, before building either package
+. packaging/common.sh
+check_prereqs all
+cd packaging
 sh ./build-appimage.sh
 sh ./build-deb.sh

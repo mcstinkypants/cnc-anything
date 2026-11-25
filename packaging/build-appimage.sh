@@ -10,12 +10,7 @@ RUNTIME=packaging/runtime-x86_64
 RUNTIME_URL=https://github.com/AppImage/type2-runtime/releases/download/continuous/runtime-x86_64
 
 . packaging/common.sh
-find_cargo
-need_linker
-need_tool mksquashfs "to pack the AppImage" squashfs-tools
-if [ ! -s "$RUNTIME" ]; then
-    need_tool curl "to download the AppImage runtime" curl
-fi
+check_prereqs appimage
 
 cargo build --release
 
