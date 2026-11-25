@@ -1,0 +1,38 @@
+# --- Rust build output (rebuilt by `cargo build`)
+/target/
+**/*.rs.bk
+*.pdb
+
+# --- Packaged app (rebuilt by `sh packaging/build-appimage.sh`)
+/dist/
+*.AppImage
+*.squashfs
+*.AppDir/
+
+# AppImage runtime: downloaded by the packaging script when missing
+/packaging/runtime-x86_64
+
+# --- Screenshots from `--screenshot` checks and manual tests
+shots/
+
+# --- Python leftovers from the earlier browser version's launcher
+__pycache__/
+*.py[cod]
+
+# --- Node / browser tooling (in case the web version is worked on again)
+node_modules/
+.npm/
+
+# --- Editors and operating systems
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# --- Logs and local environment files (never commit secrets)
+*.log
+.env
+.env.*

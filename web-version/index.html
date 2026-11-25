@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Burner</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23222'/%3E%3Cpath d='M16 3v14' stroke='%23ff5a2a' stroke-width='3'/%3E%3Ccircle cx='16' cy='22' r='5' fill='%23ffb000'/%3E%3C/svg%3E">
+</head>
+<body>
+<div id="app">
+  <header id="menubar">
+    <div class="brand"><span class="logo"></span>Burner</div>
+    <div class="menu" data-menu="file">File
+      <div class="dropdown">
+        <button data-cmd="new">New project <kbd>Ctrl+N</kbd></button>
+        <button data-cmd="open">Open project… <kbd>Ctrl+O</kbd></button>
+        <button data-cmd="save">Save project <kbd>Ctrl+S</kbd></button>
+        <hr>
+        <button data-cmd="import">Import drawing or picture… <kbd>Ctrl+I</kbd></button>
+        <button data-cmd="exportGcode">Save G-code…</button>
+        <button data-cmd="exportSvg">Export SVG…</button>
+        <hr>
+        <button data-cmd="sample">Load sample design</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="edit">Edit
+      <div class="dropdown">
+        <button data-cmd="undo">Undo <kbd>Ctrl+Z</kbd></button>
+        <button data-cmd="redo">Redo <kbd>Ctrl+Y</kbd></button>
+        <hr>
+        <button data-cmd="cut">Cut <kbd>Ctrl+X</kbd></button>
+        <button data-cmd="copy">Copy <kbd>Ctrl+C</kbd></button>
+        <button data-cmd="paste">Paste <kbd>Ctrl+V</kbd></button>
+        <button data-cmd="duplicate">Duplicate <kbd>Ctrl+D</kbd></button>
+        <button data-cmd="delete">Delete <kbd>Del</kbd></button>
+        <hr>
+        <button data-cmd="selectAll">Select all <kbd>Ctrl+A</kbd></button>
+        <button data-cmd="settings">Device settings…</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="arrange">Arrange
+      <div class="dropdown">
+        <button data-cmd="alignL">Align left edges</button>
+        <button data-cmd="alignCH">Align centers horizontally</button>
+        <button data-cmd="alignR">Align right edges</button>
+        <button data-cmd="alignT">Align top edges</button>
+        <button data-cmd="alignCV">Align centers vertically</button>
+        <button data-cmd="alignB">Align bottom edges</button>
+        <hr>
+        <button data-cmd="mirrorH">Mirror horizontally</button>
+        <button data-cmd="mirrorV">Mirror vertically</button>
+        <button data-cmd="rot90">Rotate 90° clockwise</button>
+        <button data-cmd="rot-90">Rotate 90° counter-clockwise</button>
+        <hr>
+        <button data-cmd="centerBed">Move to center of bed</button>
+        <button data-cmd="toPath">Convert to editable path</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="laser">Laser
+      <div class="dropdown">
+        <button data-cmd="connectSerial">Connect over USB…</button>
+        <button data-cmd="connectSim">Connect practice machine</button>
+        <button data-cmd="disconnect">Disconnect</button>
+        <hr>
+        <button data-cmd="preview">Preview job <kbd>Alt+P</kbd></button>
+        <button data-cmd="start">Start job</button>
+        <button data-cmd="frame">Frame</button>
+        <button data-cmd="home">Home</button>
+        <hr>
+        <button data-cmd="settings">Device settings…</button>
+      </div>
+    </div>
+    <div class="menu" data-menu="help">Help
+      <div class="dropdown">
+        <button data-cmd="help">Getting started</button>
+        <button data-cmd="keys">Keyboard shortcuts</button>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div id="docname">Untitled</div>
+  </header>
+
+  <div id="toolbar">
+    <button class="tb" data-cmd="new" title="New project"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z M14 3v4h4"/></svg></button>
+    <button class="tb" data-cmd="open" title="Open project"><svg viewBox="0 0 24 24"><path d="M3 7h6l2 2h10v10H3z"/></svg></button>
+    <button class="tb" data-cmd="save" title="Save project"><svg viewBox="0 0 24 24"><path d="M5 3h12l3 3v15H5z M8 3v6h8V3 M8 21v-7h8v7"/></svg></button>
+    <button class="tb" data-cmd="import" title="Import drawing or picture"><svg viewBox="0 0 24 24"><path d="M12 3v12 M7 10l5 5 5-5 M4 19h16"/></svg></button>
+    <span class="sep"></span>
+    <button class="tb" data-cmd="undo" title="Undo"><svg viewBox="0 0 24 24"><path d="M9 7L4 12l5 5 M4 12h10a6 6 0 010 12"/></svg></button>
+    <button class="tb" data-cmd="redo" title="Redo"><svg viewBox="0 0 24 24"><path d="M15 7l5 5-5 5 M20 12H10a6 6 0 000 12"/></svg></button>
+    <span class="sep"></span>
+    <button class="tb" data-cmd="zoomFit" title="Zoom to the whole bed"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16"/><path d="M9 4v3 M15 4v3 M4 9h3 M4 15h3"/></svg></button>
+    <button class="tb" data-cmd="zoomSel" title="Zoom to selection"><svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M15 15l5 5 M8 10h4 M10 8v4"/></svg></button>
+    <button class="tb" data-cmd="preview" title="Preview the job"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+    <button class="tb" data-cmd="settings" title="Device settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3 M12 19v3 M2 12h3 M19 12h3 M5 5l2 2 M17 17l2 2 M5 19l2-2 M17 7l2-2"/></svg></button>
+    <span class="sep"></span>
+    <button class="tb toggle" id="snapGrid" title="Snap to grid (hold Alt to turn snapping off for a moment)"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z M4 10h16 M4 15h16 M10 4v16 M15 4v16"/><circle cx="15" cy="15" r="2" fill="currentColor"/></svg></button>
+    <select id="snapStep" title="Grid snap spacing">
+      <option value="0">Snap: follow grid</option><option value="0.1">Snap 0.1 mm</option><option value="0.5">Snap 0.5 mm</option><option value="1">Snap 1 mm</option>
+      <option value="2">Snap 2 mm</option><option value="5">Snap 5 mm</option><option value="10">Snap 10 mm</option>
+    </select>
+    <button class="tb toggle" id="snapObj" title="Snap to the centers of other objects and the bed"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8"/><circle cx="17" cy="17" r="4"/><path d="M7 7h10v10" stroke-dasharray="2 2"/><circle cx="7" cy="7" r="1.3" fill="currentColor"/></svg></button>
+    <span class="sep"></span>
+    <div id="numeric">
+      <label>X<input id="nX" type="number" step="0.1"></label>
+      <label>Y<input id="nY" type="number" step="0.1"></label>
+      <label>W<input id="nW" type="number" step="0.1" min="0.01"></label>
+      <label>H<input id="nH" type="number" step="0.1" min="0.01"></label>
+      <button id="nLock" class="lock on" title="Keep proportions">🔒</button>
+      <label>Rotate<input id="nR" type="number" step="1"></label>
+      <span class="unit">mm</span>
+    </div>
+    <div id="shapeOpts"></div>
+  </div>
+
+  <div id="main">
+    <nav id="tools">
+      <button class="tool active" data-tool="select" title="Select (V)"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-6 1-3 6z"/></svg></button>
+      <button class="tool" data-tool="line" title="Draw lines (L)"><svg viewBox="0 0 24 24"><path d="M4 18L10 6l5 9 5-8"/><circle cx="4" cy="18" r="1.5"/><circle cx="20" cy="7" r="1.5"/></svg></button>
+      <button class="tool" data-tool="rect" title="Rectangle (R)"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12"/></svg></button>
+      <button class="tool" data-tool="ellipse" title="Ellipse (E)"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="8" ry="6"/></svg></button>
+      <button class="tool" data-tool="polygon" title="Polygon (P)"><svg viewBox="0 0 24 24"><path d="M12 3l8 6-3 10H7L4 9z"/></svg></button>
+      <button class="tool" data-tool="text" title="Text (T)"><svg viewBox="0 0 24 24"><path d="M5 5h14 M12 5v15 M9 20h6"/></svg></button>
+      <button class="tool" data-tool="pan" title="Pan (hold Space or middle mouse)"><svg viewBox="0 0 24 24"><path d="M12 2v20 M2 12h20 M12 2l-3 3 M12 2l3 3 M12 22l-3-3 M12 22l3-3 M2 12l3-3 M2 12l3 3 M22 12l-3-3 M22 12l-3 3"/></svg></button>
+      <button class="tool" data-tool="measure" title="Measure (M)"><svg viewBox="0 0 24 24"><path d="M3 17L17 3l4 4L7 21z M7 13l2 2 M10 10l2 2 M13 7l2 2"/></svg></button>
+    </nav>
+
+    <div id="stage">
+      <canvas id="cv"></canvas>
+      <div id="previewBar" hidden>
+        <strong>Preview</strong>
+        <input id="pvSlider" type="range" min="0" max="1000" value="1000">
+        <label><input id="pvTravel" type="checkbox" checked> Show travel moves</label>
+        <span id="pvInfo"></span>
+        <button data-cmd="exportGcode">Save G-code</button>
+        <button data-cmd="start" class="primary">Start</button>
+        <button data-cmd="closePreview">Close preview</button>
+      </div>
+      <div id="toast"></div>
+    </div>
+
+    <aside id="side">
+      <section id="cutsPanel" class="panel">
+        <h3>Cuts / Layers</h3>
+        <table id="cutsTable">
+          <thead><tr><th>#</th><th>Layer</th><th>Mode</th><th>Spd / Pwr</th><th title="Burn this layer">Output</th><th title="Show on screen">Show</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="row small">
+          <button id="layerUp" title="Cut this layer earlier">▲</button>
+          <button id="layerDown" title="Cut this layer later">▼</button>
+          <span class="hint" id="cutsHint">Draw something, then pick a color below to choose its layer.</span>
+        </div>
+        <div id="layerEditor"></div>
+      </section>
+
+      <section class="panel tabs">
+        <div class="tabbar">
+          <button class="tab active" data-tab="laserTab">Laser</button>
+          <button class="tab" data-tab="moveTab">Move</button>
+          <button class="tab" data-tab="consoleTab">Console</button>
+        </div>
+        <div id="laserTab" class="tabpage active">
+          <div class="conn">
+            <span id="stateDot" class="dot off"></span><span id="stateText">Not connected</span>
+            <span class="spacer"></span>
+            <span id="posText" class="mono">X — Y —</span>
+          </div>
+          <div class="row">
+            <button id="btnConnect" class="primary">Connect USB</button>
+            <button id="btnSim">Practice machine</button>
+            <button id="btnDisconnect" hidden>Disconnect</button>
+          </div>
+          <div class="grid3">
+            <button data-cmd="home">Home</button>
+            <button data-cmd="frame">Frame</button>
+            <button data-cmd="unlock">Unlock</button>
+            <button data-cmd="start" class="go">Start</button>
+            <button data-cmd="pause" id="btnPause">Pause</button>
+            <button data-cmd="stop" class="stop">Stop</button>
+          </div>
+          <div class="row">
+            <button data-cmd="preview">Preview</button>
+            <button data-cmd="exportGcode">Save G-code</button>
+          </div>
+          <div id="jobBox" hidden>
+            <div class="progress"><div id="jobBar"></div></div>
+            <div id="jobText" class="small"></div>
+          </div>
+          <div class="field">
+            <label>Start from</label>
+            <select id="startFrom">
+              <option value="absolute">Absolute coordinates</option>
+              <option value="user">User origin</option>
+              <option value="current">Current position</option>
+            </select>
+          </div>
+          <div class="field" id="anchorField">
+            <label>Job origin</label>
+            <div id="anchor" class="anchor"></div>
+          </div>
+          <label class="check"><input id="selOnly" type="checkbox"> Cut selected graphics only</label>
+          <label class="check"><input id="innerFirst" type="checkbox" checked> Cut inner shapes first</label>
+        </div>
+        <div id="moveTab" class="tabpage">
+          <div class="jogwrap">
+            <div class="jog">
+              <button data-jog="-1,1">↖</button><button data-jog="0,1">↑</button><button data-jog="1,1">↗</button>
+              <button data-jog="-1,0">←</button><button data-cmd="home" title="Home">⌂</button><button data-jog="1,0">→</button>
+              <button data-jog="-1,-1">↙</button><button data-jog="0,-1">↓</button><button data-jog="1,-1">↘</button>
+            </div>
+            <div class="jogset">
+              <div class="field"><label>Distance (mm)</label><input id="jogDist" type="number" value="10" min="0.01" step="1"></div>
+              <div class="field"><label>Speed (mm/s)</label><input id="jogSpeed" type="number" value="50" min="1" step="5"></div>
+            </div>
+          </div>
+          <div class="grid2">
+            <button data-cmd="setOrigin">Set origin here</button>
+            <button data-cmd="gotoOrigin">Go to origin</button>
+            <button data-cmd="gotoSel">Move laser to selection</button>
+            <button data-cmd="pulse" title="Fire the laser briefly at low power">Fire (pulse)</button>
+          </div>
+          <div class="small hint">Arrow keys jog the head while this tab is open and the canvas has nothing selected.</div>
+        </div>
+        <div id="consoleTab" class="tabpage">
+          <div id="console" class="mono"></div>
+          <div class="row">
+            <input id="consoleIn" class="mono" placeholder="Type a command, e.g. $$ or G0 X10" autocomplete="off">
+            <button id="consoleSend">Send</button>
+          </div>
+          <div class="row small">
+            <button data-send="$$">$$ settings</button>
+            <button data-send="$I">$I info</button>
+            <button data-send="$G">$G state</button>
+            <button data-send="$#">$# offsets</button>
+            <button id="consoleClear">Clear</button>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <div id="palette"></div>
+  <footer id="statusbar">
+    <span id="sbPos" class="mono">x: 0.00 y: 0.00 mm</span>
+    <span id="sbSel"></span>
+    <span class="spacer"></span>
+    <span id="sbMsg"></span>
+    <span id="sbZoom" class="mono"></span>
+  </footer>
+</div>
+
+<input id="fileOpen" type="file" accept=".burner,.lsproj,.json" hidden>
+<input id="fileImport" type="file" accept=".svg,image/png,image/jpeg,image/gif,image/webp,image/bmp" multiple hidden>
+
+<dialog id="dlgSettings">
+  <form method="dialog">
+    <h2>Device settings</h2>
+    <div class="cols">
+      <div class="field"><label>Name</label><input name="name"></div>
+      <div class="field"><label>Controller</label>
+        <select name="type"><option value="grbl">GRBL 1.1f or newer (variable power, M4)</option><option value="grbl-m3">GRBL 1.1e or older (constant power, M3)</option></select></div>
+      <div class="field"><label>Bed width (mm)</label><input name="bedW" type="number" min="10" step="1"></div>
+      <div class="field"><label>Bed height (mm)</label><input name="bedH" type="number" min="10" step="1"></div>
+      <div class="field"><label>S-value max <span class="hint">(match GRBL $30)</span></label><input name="sMax" type="number" min="1" step="1"></div>
+      <div class="field"><label>Baud rate</label><select name="baud"><option>9600</option><option>57600</option><option>115200</option><option>230400</option><option>250000</option><option>500000</option></select></div>
+      <div class="field"><label>Controller buffer (bytes)</label><input name="bufferSize" type="number" min="32" step="1"></div>
+      <div class="field"><label>Travel speed for estimates (mm/s)</label><input name="rapid" type="number" min="1" step="1"></div>
+      <div class="field"><label>Finish position X (mm)</label><input name="finishX" type="number" step="1"></div>
+      <div class="field"><label>Finish position Y (mm)</label><input name="finishY" type="number" step="1"></div>
+    </div>
+    <label class="check"><input name="originTop" type="checkbox"> Origin (0,0) is the upper-left corner (Y counts down toward the front)</label>
+    <label class="check"><input name="returnToFinish" type="checkbox"> Return to the finish position after a job</label>
+    <label class="check"><input name="autoHome" type="checkbox"> Home the machine when connecting</label>
+    <label class="check"><input name="useG0Overscan" type="checkbox"> Use fast moves (G0) for overscan</label>
+    <label class="check"><input name="stripLeadingZero" type="checkbox"> Shorten numbers (.5 instead of 0.5)</label>
+    <div class="actions"><button value="cancel">Cancel</button><button value="ok" class="primary">Save</button></div>
+  </form>
+</dialog>
+
+<dialog id="dlgText">
+  <form method="dialog">
+    <h2>Text</h2>
+    <textarea name="text" rows="3">Hello</textarea>
+    <div class="cols">
+      <div class="field"><label>Font</label>
+        <select name="font">
+          <option value="sans-serif">Sans</option><option value="serif">Serif</option><option value="monospace">Monospace</option>
+          <option value="cursive">Script</option><option value="Impact, sans-serif">Heavy</option><option value="Georgia, serif">Book</option>
+        </select></div>
+      <div class="field"><label>Height (mm)</label><input name="size" type="number" min="1" step="0.5" value="12"></div>
+      <div class="field"><label>Align</label><select name="align"><option>left</option><option>center</option><option>right</option></select></div>
+    </div>
+    <label class="check"><input name="bold" type="checkbox"> Bold</label>
+    <label class="check"><input name="italic" type="checkbox"> Italic</label>
+    <div class="actions"><button value="cancel">Cancel</button><button value="ok" class="primary">OK</button></div>
+  </form>
+</dialog>
+
+<dialog id="dlgInfo"><form method="dialog"><h2 id="infoTitle"></h2><div id="infoBody"></div><div class="actions"><button value="ok" class="primary">OK</button></div></form></dialog>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
